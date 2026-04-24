@@ -38,7 +38,7 @@ This repo includes `render.yaml` so you can deploy it as a single Render web ser
    - `MONGODB_URI`
    - `GOOGLE_CLIENT_ID`
    - `VITE_GOOGLE_CLIENT_ID`
-   - `FRONTEND_URL`
+   - optionally `FRONTEND_URL` if you later add a custom domain or split the frontend and backend onto different hosts
 4. Deploy. Render will:
    - install backend and frontend dependencies
    - build the Vite frontend
