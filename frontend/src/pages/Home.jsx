@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../lib/api';
 
 const Home = () => {
     const [code, setCode] = useState('');
@@ -14,7 +14,7 @@ const Home = () => {
         setLoading(true);
 
         try {
-            const res = await axios.get(`http://localhost:5000/api/codes/verify/${code}`);
+            const res = await api.get(`/api/codes/verify/${code}`);
             setVerificationResult(res.data);
         } catch (err) {
             setError(err.response?.data?.message || 'Verification failed. This code may be invalid or counterfeit.');

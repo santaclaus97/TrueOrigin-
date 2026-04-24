@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const API = 'http://localhost:5000';
+import api from '../../lib/api';
 
 const UserDashboard = () => {
     const navigate = useNavigate();
@@ -25,8 +23,8 @@ const UserDashboard = () => {
     const fetchData = async () => {
         try {
             const [prodRes, ordersRes] = await Promise.all([
-                axios.get(`${API}/api/products`),
-                axios.get(`${API}/api/orders/myorders`, authConfig())
+                api.get('/api/products'),
+                api.get('/api/orders/myorders', authConfig())
             ]);
             setProducts(prodRes.data);
             setOrders(ordersRes.data);
@@ -53,7 +51,7 @@ const UserDashboard = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-2">
-                <h2>🛍️ TrueOrigin Store</h2>
+                <h2>TrueOrigin Store</h2>
                 <div className="badge badge-primary" style={{ background: 'rgba(99,102,241,0.2)', color: '#818cf8' }}>
                     {user?.name}
                 </div>
@@ -64,7 +62,6 @@ const UserDashboard = () => {
                 <button style={tabStyle('orders')} onClick={() => setActiveTab('orders')}>My Orders ({orders.length})</button>
             </div>
 
-            {/* Shop Tab */}
             {activeTab === 'shop' && (
                 <div>
                     {products.length === 0 ? (
@@ -75,12 +72,12 @@ const UserDashboard = () => {
                                 <div key={p._id} className="glass-panel" style={{ padding: '1.2rem', display: 'flex', flexDirection: 'column' }}>
                                     {p.image
                                         ? <img src={p.image} alt={p.name} style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '8px', marginBottom: '0.8rem' }} />
-                                        : <div style={{ width: '100%', height: '160px', background: 'rgba(99,102,241,0.15)', borderRadius: '8px', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>🛒</div>
+                                        : <div style={{ width: '100%', height: '160px', background: 'rgba(99,102,241,0.15)', borderRadius: '8px', marginBottom: '0.8rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem' }}>Shop</div>
                                     }
                                     <h4 style={{ marginBottom: '4px' }}>{p.name}</h4>
                                     <p style={{ fontSize: '0.85rem', opacity: 0.7, flex: 1 }}>{p.description}</p>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '12px' }}>
-                                        <strong style={{ color: '#6366f1', fontSize: '1.2rem' }}>₹{p.price}</strong>
+                                        <strong style={{ color: '#6366f1', fontSize: '1.2rem' }}>INR {p.price}</strong>
                                         <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>by {p.manufacturer?.name}</span>
                                     </div>
                                     <div style={{ marginTop: '8px', fontSize: '0.78rem', opacity: 0.5 }}>
@@ -93,7 +90,6 @@ const UserDashboard = () => {
                 </div>
             )}
 
-            {/* Orders Tab */}
             {activeTab === 'orders' && (
                 <div className="glass-panel" style={{ overflowX: 'auto' }}>
                     <h3>My Purchased Products</h3>

@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
-const API = 'http://localhost:5000';
+import api from '../../lib/api';
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -31,8 +29,8 @@ const AdminDashboard = () => {
     const fetchData = async () => {
         try {
             const [prodRes, codesRes] = await Promise.all([
-                axios.get(`${API}/api/products`),
-                axios.get(`${API}/api/codes/admin`, authConfig())
+                api.get('/api/products'),
+                api.get('/api/codes/admin', authConfig())
             ]);
             setProducts(prodRes.data.filter(p => p.manufacturer._id === user._id));
             setCodes(codesRes.data);
@@ -45,10 +43,12 @@ const AdminDashboard = () => {
 
     const handleAddProduct = async (e) => {
         e.preventDefault();
-        setErrorMsg(''); setSuccessMsg('');
+        setErrorMsg('');
+        setSuccessMsg('');
+
         try {
-            const res = await axios.post(`${API}/api/products`, newProduct, authConfig());
-            setSuccessMsg(`✅ "${res.data.name}" added with ${res.data.codesGenerated} unique codes generated.`);
+            const res = await api.post('/api/products', newProduct, authConfig());
+            setSuccessMsg(`Added "${res.data.name}" with ${res.data.codesGenerated} unique codes generated.`);
             setNewProduct({ name: '', description: '', price: '', quantity: '', image: '' });
             fetchData();
         } catch (err) {
@@ -61,7 +61,6 @@ const AdminDashboard = () => {
     const tabStyle = (tab) => ({
         padding: '10px 24px',
         cursor: 'pointer',
-        borderBottom: activeTab === tab ? '2px solid var(--primary-color)' : '2px solid transparent',
         color: activeTab === tab ? 'var(--primary-color)' : 'inherit',
         background: 'none',
         border: 'none',
@@ -73,18 +72,16 @@ const AdminDashboard = () => {
     return (
         <div>
             <div className="flex justify-between items-center mb-2">
-                <h2>🏪 Admin Panel</h2>
+                <h2>Admin Panel</h2>
                 <div className="badge badge-success">Admin: {user?.name}</div>
             </div>
 
-            {/* Tabs */}
             <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: '1.5rem' }}>
                 <button style={tabStyle('products')} onClick={() => setActiveTab('products')}>My Products</button>
                 <button style={tabStyle('add')} onClick={() => setActiveTab('add')}>+ Add Product</button>
                 <button style={tabStyle('codes')} onClick={() => setActiveTab('codes')}>Unique Codes</button>
             </div>
 
-            {/* Add Product Tab */}
             {activeTab === 'add' && (
                 <div className="glass-panel" style={{ maxWidth: '560px' }}>
                     <h3>Add New Product</h3>
@@ -103,7 +100,7 @@ const AdminDashboard = () => {
                         </div>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                             <div className="form-group">
-                                <label className="form-label">Price (₹)</label>
+                                <label className="form-label">Price (INR)</label>
                                 <input type="number" className="form-control" placeholder="e.g. 49"
                                     value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} required min="0" />
                             </div>
@@ -126,7 +123,6 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {/* Products Tab */}
             {activeTab === 'products' && (
                 <div>
                     {products.length === 0 ? (
@@ -145,7 +141,7 @@ const AdminDashboard = () => {
                                         <h4 style={{ marginBottom: '4px' }}>{p.name}</h4>
                                         <p style={{ fontSize: '0.85rem', opacity: 0.7, marginBottom: '8px' }}>{p.description}</p>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <strong style={{ color: '#6366f1', fontSize: '1.1rem' }}>₹{p.price}</strong>
+                                            <strong style={{ color: '#6366f1', fontSize: '1.1rem' }}>INR {p.price}</strong>
                                             <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Qty: {p.quantity}</span>
                                         </div>
                                         <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
@@ -160,7 +156,6 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {/* Codes Tab */}
             {activeTab === 'codes' && (
                 <div className="glass-panel" style={{ overflowX: 'auto' }}>
                     <h3>All Unique Codes</h3>
