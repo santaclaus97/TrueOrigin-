@@ -1,54 +1,36 @@
-# TrueOrigin
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-TrueOrigin is a product authenticity app with:
+## Getting Started
 
-- a React + Vite frontend
-- an Express + MongoDB backend
-- JWT-based auth
-- Google sign-in for buyers
-- unique product code verification
-
-## Local setup
-
-1. Create `backend/.env` from `backend/.env.example`.
-2. Create `frontend/.env` from `frontend/.env.example`.
-3. Install dependencies:
+First, run the development server:
 
 ```bash
-npm install --prefix backend
-npm install --prefix frontend
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-4. Run the apps:
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```bash
-npm run dev --prefix backend
-npm run dev --prefix frontend
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-If `VITE_API_URL` is blank, the frontend calls the current origin. That is useful for production when the built frontend is served by the backend.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Deploy on Render
+## Learn More
 
-This repo includes `render.yaml` so you can deploy it as a single Render web service.
+To learn more about Next.js, take a look at the following resources:
 
-1. Create a MongoDB Atlas cluster and copy the connection string.
-2. In Render, create a new Blueprint or Web Service from this GitHub repo.
-3. Set these environment variables:
-   - `MONGODB_URI`
-   - `GOOGLE_CLIENT_ID`
-   - `VITE_GOOGLE_CLIENT_ID`
-   - optionally `FRONTEND_URL` if you later add a custom domain or split the frontend and backend onto different hosts
-4. Deploy. Render will:
-   - install backend and frontend dependencies
-   - build the Vite frontend
-   - start the Express server
-   - serve the built frontend from the same app
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-## Google OAuth
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-For Google sign-in to work, create a Web application OAuth client and add these under Authorized JavaScript origins:
+## Deploy on Vercel
 
-- `http://localhost`
-- `http://localhost:5173`
-- your deployed Render URL
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
